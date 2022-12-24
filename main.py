@@ -4,8 +4,8 @@ from CodeGenerator import CodeGenerator
 
 class People(Schema):
     name = fields.Str()
+    sex = fields.Bool()
     age = fields.Bool(default=True)
-    sex = fields.Bool(required=False)
     cpf = fields.Bool(required=True, default="000")
 
 def create_code_python(string):

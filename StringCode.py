@@ -1,14 +1,6 @@
 from StringCodeActionEnum import StringCodeActionEnum
-
+from SchemaInformation import SchemaInformation
 class StringCode:
-
-    def get_method_to_string_declaration(self, method_name="__init__"):
-        return "{}def{}{}(self):{}".format(
-            StringCodeActionEnum.INDENTATION.value,
-            StringCodeActionEnum.SPACE.value,
-            method_name,
-            StringCodeActionEnum.ENTER.value,
-        )
 
     def apply_indentation(self, string: str):
         return string.replace(StringCodeActionEnum.INDENTATION.value, "    ")
@@ -40,10 +32,35 @@ class StringCode:
         ])
         return string_method + f"{StringCodeActionEnum.CLASS_ATTRIBUTE.value}{string_attributes}"
 
-    def add_params(self, string_method: str, params: list):
-        string_params = ", ".join([param for param in params])
+    def add_params(self, string_method: str, params):
+        def get_string_param(param_name):
+            param_string = f"{param_name}"
+
+            param_default_value = SchemaInformation.get_field_default_value(params[param_name])
+            if param_default_value:
+
+                if type(param_default_value) == str:
+                    param_default_value = f"'{param_default_value}'"
+
+                param_string += f"={param_default_value}"
+
+            return param_string
+
+        string_params = ", ".join([
+            get_string_param(param_name)
+            for param_name in params
+        ])
+
         END_METHOD_DECLARATION = f"):{StringCodeActionEnum.ENTER.value}"
         return string_method.replace(END_METHOD_DECLARATION, f"{string_params}{END_METHOD_DECLARATION}")
+
+    def get_method_to_string_declaration(self, method_name="__init__"):
+        return "{}def{}{}(self):{}".format(
+            StringCodeActionEnum.INDENTATION.value,
+            StringCodeActionEnum.SPACE.value,
+            method_name,
+            StringCodeActionEnum.ENTER.value,
+        )
 
     def create_code_string_in_line(self, code_strings: list):
         return "".join([line for line in code_strings])
@@ -65,7 +82,7 @@ class StringCode:
     def create_class_method_init_in_string_declaration(self, attributes):
         string_method_init = self.get_method_to_string_declaration()
         if attributes:
-            string_method_init = string_method_init.replace("):", ", ):") # TO DO: TEMP
+            string_method_init = string_method_init.replace("):", ", ):")
             string_method_init = self.add_params(string_method_init, attributes)
-            string_method_init = self.add_attributes(string_method_init, attributes)
+            string_method_init = self.add_attributes(string_method_init, attributes.keys())
         return string_method_init

@@ -12,6 +12,7 @@ class SchemaInformation:
     def get_fields_schema(self):
         return self.schema._declared_fields
 
+    @classmethod
     def get_field_default_value(self, field: Field):
         return field.default
 

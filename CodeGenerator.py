@@ -7,16 +7,17 @@ class CodeGenerator:
     def create_model(self, model_name: str, model_attributes: dict, python_format: bool = True):
         string_code = StringCode()
         declaration_class = string_code.parse_class_name_to_string_declaration(model_name)
-        declaration_class_method_init = string_code.create_class_method_init_in_string_declaration(model_attributes.keys())
+        declaration_class_method_init = string_code.create_class_method_init_in_string_declaration(model_attributes)
 
         declaration_model_string_in_line = string_code.create_code_string_in_line([
             declaration_class,
             declaration_class_method_init
         ])
 
+        model = declaration_model_string_in_line
         if python_format:
-            return string_code.parse_string_code_declaration_in_line_to_python_format(declaration_model_string_in_line)
-        return declaration_model_string_in_line
+            model = string_code.parse_string_code_declaration_in_line_to_python_format(declaration_model_string_in_line)
+        return model
 
     def get_model_by_schema(self, schema: Schema):
         schema_information = SchemaInformation(schema)
