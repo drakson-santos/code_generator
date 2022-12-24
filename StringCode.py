@@ -61,14 +61,14 @@ class StringCode:
         END_METHOD_DECLARATION = f"):{StringCodeActionEnum.ENTER.value}"
         return string_method.replace(END_METHOD_DECLARATION, f"{string_params}{END_METHOD_DECLARATION}")
 
-    def get_method_to_string_declaration(self, method_name="__init__"):
-        string_declaration = "{}def{}{}(self):{}".format(
-            StringCodeActionEnum.INDENTATION.value,
+    def get_method_to_string_declaration(self, method_name="__init__", indent_method=True):
+        string_declaration = "def{}{}(self):{}".format(
             StringCodeActionEnum.SPACE.value,
             method_name,
             StringCodeActionEnum.ENTER.value,
         )
-
+        if indent_method:
+            string_declaration = f"{StringCodeActionEnum.INDENTATION.value}" + string_declaration
         if method_name != "__init__":
             string_declaration = string_declaration.replace("self):", "):")
 
@@ -89,7 +89,7 @@ class StringCode:
         string_code_formatting = self.apply_space(string_code_formatting)
         string_code_formatting = self.apply_attributes(string_code_formatting)
         string_code_formatting = self.apply_enter(string_code_formatting)
-        return string_code_formatting
+        return string_code_formatting + "\n"
 
     def create_class_method_init_in_string_declaration(self, attributes):
         string_method_init = self.get_method_to_string_declaration()
