@@ -2,7 +2,17 @@ from marshmallow import Schema
 from SchemaInformation import SchemaInformation
 from StringCode import StringCode
 
-class CodeGenerator:
+class MethodGenerator():
+
+    def generate_method(self, method_name: str, *args, **kargs,):
+        string_code = StringCode()
+        declaration_method = string_code.get_method_to_string_declaration(method_name)
+        declaration_method = string_code.add_params(declaration_method, args)
+        declaration_method = string_code.add_params(declaration_method, kargs)
+
+        return declaration_method
+
+class CodeGenerator(MethodGenerator):
 
     def create_model(self, model_name: str, model_attributes: dict, python_format: bool = True):
         string_code = StringCode()
