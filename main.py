@@ -22,8 +22,8 @@ def create_code_python(string):
     f.close()
 
 code_generator = CodeGenerator()
-print(code_generator.generate_method("create", "name", "age"))
-print(code_generator.generate_method("create", cpf="12", sex=True))
-print(code_generator.generate_method("create", "name", "age", cpf="12", sex=True))
-print(code_generator.get_model_by_schema(People))
+# create_code_python(code_generator.generate_method("create", "name", "age"))
+# create_code_python(code_generator.generate_method("create", cpf="12", sex=True))
+create_code_python(code_generator.generate_function("create", "name", "age", cpf="12", sex=True))
+# create_code_python(code_generator.get_model_by_schema(People))
 # create_code_python(code_generator.generate_method("create"))
