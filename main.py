@@ -14,6 +14,8 @@ class People(Schema):
     cpf = fields.Bool(required=True, default="000")
 
 code_generator = CodeGenerator()
-create_code_python(code_generator.generate_method("create"))
-create_code_python(code_generator.generate_method("create", "name", "age", cpf="12", sex=True))
+# create_code_python(code_generator.generate_method("create", "name", "age"))
+# create_code_python(code_generator.generate_method("create", cpf="12", sex=True))
+# create_code_python(code_generator.generate_function("create", "name", "age", cpf="12", sex=True))
 create_code_python(code_generator.get_model_by_schema(People))
+# create_code_python(code_generator.generate_method("create"))

@@ -1,6 +1,6 @@
 from StringCodeActionEnum import StringCodeActionEnum
 from SchemaInformation import SchemaInformation
-from marshmallow.fields import Field
+
 class StringCode:
 
     def apply_indentation(self, string: str):
@@ -33,6 +33,13 @@ class StringCode:
         ])
         return string_method + f"{StringCodeActionEnum.CLASS_ATTRIBUTE.value}{string_attributes}"
 
+    def add_code_block_in_method(self, string_method: str, code_block: str):
+        return "{}{}{}".format(
+            string_method,
+            StringCodeActionEnum.INDENTATION.value,
+            code_block,
+        )
+
     def add_params(self, string_method: str, params, is_schema = False):
         def get_string_param(param_name):
             param_string = f"{param_name}"
@@ -61,16 +68,17 @@ class StringCode:
         END_METHOD_DECLARATION = f"):{StringCodeActionEnum.ENTER.value}"
         return string_method.replace(END_METHOD_DECLARATION, f"{string_params}{END_METHOD_DECLARATION}")
 
-    def get_method_to_string_declaration(self, method_name="__init__", indent_method=True):
+    def get_method_to_string_declaration(self, method_name="__init__", is_class_method: bool = False):
         string_declaration = "def{}{}(self):{}".format(
             StringCodeActionEnum.SPACE.value,
             method_name,
             StringCodeActionEnum.ENTER.value,
         )
-        if indent_method:
-            string_declaration = f"{StringCodeActionEnum.INDENTATION.value}" + string_declaration
-        if method_name != "__init__":
+
+        if not is_class_method:
             string_declaration = string_declaration.replace("self):", "):")
+        else:
+            string_declaration = f"{StringCodeActionEnum.INDENTATION.value}" + string_declaration
 
         return string_declaration
 
@@ -92,12 +100,18 @@ class StringCode:
         return string_code_formatting + "\n"
 
     def create_class_method_init_in_string_declaration(self, attributes):
-        string_method_init = self.get_method_to_string_declaration()
+        string_method_init = self.get_method_to_string_declaration(is_class_method = True)
         if attributes:
             string_method_init = string_method_init.replace("):", ", ):")
             string_method_init = self.add_params(string_method_init, attributes, is_schema = True)
             string_method_init = self.add_attributes(string_method_init, attributes.keys())
         return string_method_init
 
-    def create_method_string_declaration():
-        pass
+    def create_function_in_string_declaration(self, method_name, required_params = None, options_params = None):
+        declaration_method = self.get_method_to_string_declaration(method_name)
+        if required_params:
+            declaration_method = self.add_params(declaration_method, required_params)
+        if options_params:
+            declaration_method = self.add_params(declaration_method, options_params)
+        return declaration_method
+

@@ -2,24 +2,25 @@ from marshmallow import Schema
 from SchemaInformation import SchemaInformation
 from StringCode import StringCode
 
-class MethodGenerator():
+class CodeBlockGenarator:
 
-    def generate_method(self, method_name: str, *args, **kargs,):
+    @classmethod
+    def get_pass_code(self):
+        return "pass"
+
+class FunctionGenerator():
+
+    def generate_function(self, method_name: str, *args, **kargs,):
         string_code = StringCode()
-        declaration_method = string_code.get_method_to_string_declaration(method_name, indent_method=False)
-        declaration_method = string_code.add_params(declaration_method, args)
-        declaration_method = string_code.add_params(declaration_method, kargs)
+        declaration_method = string_code.create_function_in_string_declaration(
+            method_name,
+            required_params=args,
+            options_params=kargs
+        )
+        declaration_method = string_code.add_code_block_in_method(declaration_method, CodeBlockGenarator.get_pass_code())
+        return string_code.parse_string_code_declaration_in_line_to_python_format(declaration_method)
 
-        method_logic = "#pass" # temp
-        declaration_string_method_in_line = string_code.create_code_string_in_line([
-            declaration_method,
-            method_logic
-        ])
-
-        return string_code.parse_string_code_declaration_in_line_to_python_format(declaration_string_method_in_line)
-
-
-class CodeGenerator(MethodGenerator):
+class CodeGenerator(FunctionGenerator):
 
     def create_model(self, model_name: str, model_attributes: dict, python_format: bool = True):
         string_code = StringCode()
