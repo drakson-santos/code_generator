@@ -99,16 +99,16 @@ class StringCode:
         string_code_formatting = self.apply_enter(string_code_formatting)
         return string_code_formatting + "\n"
 
-    def create_class_method_init_in_string_declaration(self, attributes):
-        string_method_init = self.get_method_to_string_declaration(is_class_method = True)
+    def create_class_method_in_string_declaration(self, attributes, is_class_method=True, is_schema=True):
+        string_method_init = self.get_method_to_string_declaration(is_class_method=is_class_method)
         if attributes:
             string_method_init = string_method_init.replace("):", ", ):")
-            string_method_init = self.add_params(string_method_init, attributes, is_schema = True)
+            string_method_init = self.add_params(string_method_init, attributes, is_schema=is_schema)
             string_method_init = self.add_attributes(string_method_init, attributes.keys())
         return string_method_init
 
-    def create_function_in_string_declaration(self, method_name, required_params = None, options_params = None):
-        declaration_method = self.get_method_to_string_declaration(method_name)
+    def create_function_in_string_declaration(self, method_name, required_params=None, options_params=None, is_class_method=False):
+        declaration_method = self.get_method_to_string_declaration(method_name, is_class_method=is_class_method)
         if required_params:
             declaration_method = self.add_params(declaration_method, required_params)
         if options_params:

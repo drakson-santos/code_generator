@@ -6,3 +6,18 @@ class PeopleModel:
         self.age = age
         self.cpf = cpf
 
+
+class PeopleController:
+
+    def get(self):
+        pass
+
+    def save(self):
+        pass
+
+    def update(self):
+        pass
+
+    def delete(self):
+        pass
+
